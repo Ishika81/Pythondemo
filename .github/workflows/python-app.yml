@@ -4,16 +4,16 @@
 name: Python application
 
 on:
-    # workflow_dispatch:
-    #     inputs:
-    #         environments:
-    #             description: To deploy for env
-    #             type: environment
-    #             required: true
-    push:
-      branches: [ feature2 ]
-  # pull_request:
-  #   branches: [ master ]
+    workflow_dispatch:
+        inputs:
+            environments:
+                description: To deploy for env
+                type: environment
+                required: true
+  #   push:
+  #     branches: [ feature2 ]
+  # # pull_request:
+  # #   branches: [ master ]
             
 
 jobs:
@@ -39,3 +39,41 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     
+    - name: Build the Python Package
+      run: |
+        python -m build --outdir ${{ vars.ARTIFACTPATH }}
+    - name: upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: Build-Artifacts
+        path: ${{ github.workspace  }}/${{ vars.ARTIFACTPATH }}
+        retention-days: 5
+ 
+  deploy:
+        needs: build
+        runs-on: self-hosted
+        if: ${{ inputs.deploy  }}
+        environment: ${{ inputs.environments }}
+        steps:
+            - name: echo BackupPath
+              run: |
+                cd ${{ vars.BACKUP_PATH }}
+                dir
+            - name: Backup artifacts
+              run: |
+                Copy-Item -Path ${{ vars.DEPLOYMENTPATH  }}/* -Destination ${{ vars.BACKUP_PATH }} -Force
+            - name: echo BackupPath
+              run: |
+                cd ${{ vars.BACKUP_PATH }}
+                dir
+            - name: download artifacts
+              uses: actions/download-artifact@v4
+              with:
+                name: Build-Artifacts
+                path: ${{ vars.DEPLOYMENTPATH }}
+            - name: Restart IIS
+              run: |
+                echo "restart IIS"
+            - name: check status
+              run: |
+                echo "IIS Status"
