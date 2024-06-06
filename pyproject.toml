@@ -2,7 +2,7 @@
 name = "Pythondemo"
 version = "0.1.0"
 description = "A short description of the project"
-authors = ["ishika00818@gmail.com"]
+authors = ["Ishika Saxena ishika00818@gmail.com"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
