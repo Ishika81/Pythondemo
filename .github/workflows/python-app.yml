@@ -41,7 +41,9 @@ jobs:
     
     - name: Build the Python Package
       run: |
-        python setup.py bdist_wheel -d ${{ vars.ARTIFACTPATH }}
+        poetry build -f wheel
+        mkdir -p ${{ vars.ARTIFACTPATH }}
+        cp dist/*.whl ${{ vars.ARTIFACTPATH }}
     - name: upload artifacts
       uses: actions/upload-artifact@v3
       with:
