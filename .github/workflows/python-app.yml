@@ -3,13 +3,11 @@
 
 name: Python application
 
-on: 
-    workflow_dispatch:
-        inputs:
-            environments:
-                description: To deploy for env
-                type: environment
-                required: true
+on:
+  push:
+    branches: [ feature ]
+  # pull_request:
+  #   branches: [ master ]
             
 
 jobs:
