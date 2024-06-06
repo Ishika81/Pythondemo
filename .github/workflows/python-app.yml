@@ -39,9 +39,14 @@ jobs:
         curl -sSL https://install.python-poetry.org | python3 -
         echo "::add-path::${HOME}/.local/bin" >> $GITHUB_PATH
 
+    - name: Verify Poetry Installation
+      run: |
+        poetry --version
+    
     - name: Install dependencies
       run: |
         poetry install
+    
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
@@ -54,6 +59,7 @@ jobs:
         poetry build -f wheel
         mkdir -p ${{ vars.ARTIFACTPATH }}
         cp dist/*.whl ${{ vars.ARTIFACTPATH }}
+    
     - name: upload artifacts
       uses: actions/upload-artifact@v3
       with:
