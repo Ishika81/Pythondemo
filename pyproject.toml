@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pythondemo"
-version = "0.1.0"
+version = "1.x"
 description = "A short description of the project"
 authors = ["Ishika Saxena <ishika00818@gmail.com>"]
 
