@@ -41,7 +41,7 @@ jobs:
     
     - name: Build the Python Package
       run: |
-        python -m build --outdir ${{ vars.ARTIFACTPATH }}
+        python setup.py bdist_wheel -d ${{ vars.ARTIFACTPATH }}
     - name: upload artifacts
       uses: actions/upload-artifact@v3
       with:
